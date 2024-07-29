@@ -5,6 +5,9 @@ import com.kneeonbelly.attendance.member.entity.Member
 import com.kneeonbelly.attendance.member.repository.AttendanceRepository
 import com.kneeonbelly.attendance.member.repository.MemberRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Service
 class AttendanceService(
@@ -14,7 +17,7 @@ class AttendanceService(
     fun findAll(): List<Attendance> = attendanceRepository.findAll()
 
     fun save(param :Map<String, String>): Attendance {
-
+        println(param)
         val number:String = param["number"]?:throw Exception("Number is not exist")
         //TODO member=null 체크
         val member:Member = memberRepository.findByNumber(number)?:throw Exception("Member not found")
@@ -24,6 +27,12 @@ class AttendanceService(
 
         return attendanceRepository.save(attendance)
     }
+
+    fun findToday(): List<Attendance> {
+        val today: LocalDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN)
+        return attendanceRepository.findByAttendanceTimeAfter(today)
+    }
+
 //
 //    fun findByMember(memberId: Long): List<Attendance>? {
 //        //TODO member=null 체크

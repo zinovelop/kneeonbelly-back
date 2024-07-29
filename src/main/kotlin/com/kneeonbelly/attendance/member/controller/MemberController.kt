@@ -32,9 +32,14 @@ class MemberController(
     @GetMapping("/attendances")
     fun getAllAttendances():List<Attendance> = attendanceService.findAll()
 
-    //멤버 출석 리스트
+    //오늘 출석 조회
+    @GetMapping("/attendances/today")
+    fun getTodayAttendances():List<Attendance> = attendanceService.findToday()
+
+    //멤버의 출석 리스트
 //    @GetMapping("/members/{member_id}/attendances")
 //    fun getAttendancesById(@PathVariable member_id: Long):List<Attendance>? = attendanceService.findByMember(member_id)
+
 
     //출석하기
     @PostMapping("/attendances")
