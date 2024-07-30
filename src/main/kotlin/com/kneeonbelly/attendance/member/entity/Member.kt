@@ -11,7 +11,7 @@ class Member(
     val name: String,
     val number: String,
     var phoneNumber: String,
-    var grade: String,
+    var belt: String,
     var grau: Int,
     var description: String
 

@@ -17,14 +17,21 @@ class AttendanceService(
     fun findAll(): List<Attendance> = attendanceRepository.findAll()
 
     fun save(param :Map<String, String>): Attendance {
-        println(param)
-        val number:String = param["number"]?:throw Exception("Number is not exist")
-        //TODO member=null 체크
-        val member:Member = memberRepository.findByNumber(number)?:throw Exception("Member not found")
 
+        //파라미터 제대로 들어왔는지 확인
+        val number:String = param["number"]?:throw Exception("Number is not exist")
+        //번호로 멤버 조회
+        val member:Member = memberRepository.findByNumber(number)?:throw Exception("Member not found")
+        //오늘 출석 했는지 조화
+        val today: LocalDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN)
+        if(attendanceRepository.findByMemberAndAttendanceTimeAfter(member, today).isNotEmpty()) {
+             throw Exception("This Member is already Attendance")
+        }
+        //출석 객체 생성 후 찾은 멤버 Insert
         val attendance = Attendance()
         attendance.member = member
 
+        //저장
         return attendanceRepository.save(attendance)
     }
 
